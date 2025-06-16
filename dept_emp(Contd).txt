@@ -1,0 +1,110 @@
+Here are the Oracle SQL answers for Assignment – 3, written in the same simple format:
+
+
+---
+
+1. Queries using empmst
+
+a. Employees with same deptno as a specific empno (e.g., 10001)
+
+SELECT * FROM empmst 
+WHERE deptno = (
+    SELECT deptno FROM empmst WHERE empno = 10001
+);
+
+b. Employees with same deptno as empno 10001 and salary greater than empno 10002
+
+SELECT * FROM empmst 
+WHERE deptno = (SELECT deptno FROM empmst WHERE empno = 10001)
+AND salary > (SELECT salary FROM empmst WHERE empno = 10002);
+
+c. Employees with salary equal to the minimum salary
+
+SELECT * FROM empmst 
+WHERE salary = (SELECT MIN(salary) FROM empmst);
+
+
+---
+
+2. Sort operations
+
+a. Sort rows by city
+
+SELECT * FROM empmst ORDER BY city;
+
+b. Sort by city and deptno
+
+SELECT * FROM empmst ORDER BY city, deptno;
+
+c. Same as above, but for deptno = 10 or 20
+
+SELECT * FROM empmst 
+WHERE deptno IN (10, 20) 
+ORDER BY city, deptno;
+
+
+---
+
+3. Group and aggregate functions
+
+a. Number of employees in each dept
+
+SELECT deptno, COUNT(*) AS total_employees 
+FROM empmst 
+GROUP BY deptno;
+
+b. Department-wise sum of salary
+
+SELECT deptno, SUM(salary) AS total_salary 
+FROM empmst 
+GROUP BY deptno;
+
+c. Max and min salary grouped by deptno
+
+SELECT deptno, MAX(salary) AS max_sal, MIN(salary) AS min_sal 
+FROM empmst 
+GROUP BY deptno;
+
+d. Average salary per deptno where avg salary > 20000
+
+SELECT deptno, AVG(salary) AS avg_salary 
+FROM empmst 
+GROUP BY deptno 
+HAVING AVG(salary) > 20000;
+
+
+---
+
+4. Create view high_sal (salary > 20000)
+
+a. Create the view
+
+CREATE VIEW high_sal AS
+SELECT e.empno, e.empname, e.deptno, d.deptname, e.salary
+FROM empmst e
+JOIN deptmst d ON e.deptno = d.deptno
+WHERE e.salary > 20000;
+
+b. Select from the view
+
+SELECT * FROM high_sal;
+
+
+---
+
+5. Alter the empmst table
+
+a. Add column conv_allow
+
+ALTER TABLE empmst ADD conv_allow NUMBER(5);
+
+b. Rename column city to hometown
+
+ALTER TABLE empmst RENAME COLUMN city TO hometown;
+
+c. Describe modified table
+
+DESC empmst;
+
+
+---

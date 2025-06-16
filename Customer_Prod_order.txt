@@ -1,0 +1,124 @@
+Here are the simple Oracle SQL answers for Assignment – 2, in the same way as you requested:
+
+
+---
+
+1. Create customers table
+
+CREATE TABLE customers (
+    customer_id NUMBER(6) CONSTRAINT cust_pk PRIMARY KEY,
+    first_name VARCHAR2(10) NOT NULL,
+    last_name VARCHAR2(10) NOT NULL,
+    dob DATE,
+    phone VARCHAR2(12)
+);
+
+
+---
+
+2. Create products table
+
+CREATE TABLE products (
+    product_id NUMBER(6) CONSTRAINT products_pk PRIMARY KEY,
+    product_name VARCHAR2(30) NOT NULL,
+    price NUMBER(5,2)
+);
+
+
+---
+
+3. Insert data into customers
+
+INSERT INTO customers VALUES (10001, 'Ayan', 'Awasthi', TO_DATE('01-JAN-95', 'DD-MON-YY'), '9830190167');
+INSERT INTO customers VALUES (10002, 'Ajay', 'Agarwal', TO_DATE('05-FEB-98', 'DD-MON-YY'), '03327889017');
+INSERT INTO customers VALUES (10003, 'Rahul', 'Bose', TO_DATE('16-MAR-91', 'DD-MON-YY'), '08067218003');
+INSERT INTO customers VALUES (10004, 'Dipak', 'Aggrawal', TO_DATE('17-OCT-80', 'DD-MON-YY'), '02280055514');
+INSERT INTO customers VALUES (10005, 'Tanmay', 'Chatterjee', TO_DATE('20-MAY-70', 'DD-MON-YY'), '03324750162');
+
+
+---
+
+Insert data into products
+
+INSERT INTO products VALUES (1, 'Ear Phone', 670.00);
+INSERT INTO products VALUES (2, 'Pen Drive', 300.00);
+INSERT INTO products VALUES (3, 'Micro SD', 800.00);
+INSERT INTO products VALUES (4, 'DVD Writer', 1200.00);
+
+
+---
+
+4. Display all rows from customers and products
+
+SELECT * FROM customers;
+SELECT * FROM products;
+
+
+---
+
+5. Select specific customers (ID: 10001, 10002, 10004)
+
+SELECT * FROM customers WHERE customer_id IN (10001, 10002, 10004);
+
+
+---
+
+6. Select products with price > 750
+
+SELECT * FROM products WHERE price > 750;
+
+
+---
+
+7. Delete product where product_id = 4
+
+DELETE FROM products WHERE product_id = 4;
+
+
+---
+
+8. Display products table
+
+SELECT * FROM products;
+
+
+---
+
+9. Rollback the delete and verify
+
+ROLLBACK;
+SELECT * FROM products;
+
+
+---
+
+10. Insert duplicate customer_id (Expecting error)
+
+-- This will show error because customer_id = 10001 already exists
+INSERT INTO customers VALUES (10001, 'Test', 'Duplicate', TO_DATE('01-JAN-90', 'DD-MON-YY'), '0000000000');
+
+
+---
+
+11. Create orders table
+
+CREATE TABLE orders (
+    order_id NUMBER(5) PRIMARY KEY,
+    customer_id NUMBER(6) REFERENCES customers(customer_id),
+    product_id NUMBER(6) REFERENCES products(product_id),
+    order_amt NUMBER(8,2) NOT NULL,
+    order_dt DATE DEFAULT SYSDATE
+);
+
+
+---
+
+12. Insert 5 rows into orders (example data)
+
+INSERT INTO orders VALUES (101, 10001, 1, 670.00, SYSDATE);
+INSERT INTO orders VALUES (102, 10002, 3, 800.00, SYSDATE);
+INSERT INTO orders VALUES (103, 10003, 2, 300.00, SYSDATE);
+INSERT INTO orders VALUES (104, 10004, 4, 1200.00, SYSDATE);
+INSERT INTO orders VALUES (105, 10005, 1, 670.00, SYSDATE);
+
+

@@ -1,0 +1,88 @@
+Here are the Oracle SQL (PL/SQL) answers for Assignment – 5, written clearly and simply as per your earlier format:
+
+---
+
+1. PL/SQL with explicit cursor using lowval and highval on empmst
+
+
+DECLARE
+    CURSOR c_salary_range (lowval NUMBER, highval NUMBER) IS
+        SELECT empno, empname, salary FROM empmst
+        WHERE salary BETWEEN lowval AND highval;
+
+    v_empno   empmst.empno%TYPE;
+    v_name    empmst.empname%TYPE;
+    v_salary  empmst.salary%TYPE;
+
+    v_count   NUMBER := 0;
+BEGIN
+    OPEN c_salary_range(10000, 50000);  -- Example: lowval=10000, highval=50000
+
+    LOOP
+        FETCH c_salary_range INTO v_empno, v_name, v_salary;
+        EXIT WHEN c_salary_range%NOTFOUND;
+        v_count := v_count + 1;
+
+        DBMS_OUTPUT.PUT_LINE('Emp No: ' || v_empno || ', Name: ' || v_name || ', Salary: ' || v_salary);
+    END LOOP;
+
+    IF v_count = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('No such records');
+    END IF;
+
+    CLOSE c_salary_range;
+END;
+/
+
+
+---
+
+2. Function cube_val to return cube of a number
+
+a. Create the function
+
+CREATE OR REPLACE FUNCTION cube_val(n NUMBER)
+RETURN NUMBER IS
+BEGIN
+    RETURN n * n * n;
+END;
+/
+
+b. Call from SQL prompt
+
+SELECT cube_val(3) FROM dual;
+
+c. Call from PL/SQL block
+
+DECLARE
+    result NUMBER;
+BEGIN
+    result := cube_val(4);
+    DBMS_OUTPUT.PUT_LINE('Cube of 4 is: ' || result);
+END;
+/
+
+
+---
+
+3. Function show_name to return employee name or message
+
+a. Create the function
+
+CREATE OR REPLACE FUNCTION show_name(p_empno NUMBER)
+RETURN VARCHAR2 IS
+    v_name empmst.empname%TYPE;
+BEGIN
+    SELECT empname INTO v_name FROM empmst WHERE empno = p_empno;
+    RETURN v_name;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 'No such record';
+END;
+/
+
+b. Call from SQL prompt
+
+SELECT show_name(10001) FROM dual;
+
+---
